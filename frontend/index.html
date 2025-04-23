@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Purchase Form</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+    <h2>Purchase Form</h2>
+    <form id="itemForm">
+        <label>Purchase Date:
+            <input type="date" name="purchase_date" id="purchase_date" required />
+        </label>
+        <div id="items"></div>
+        <button type="button" onclick="addItem()">+ Add Item</button>
+        <br />
+        <button type="submit">Submit Purchase</button>
+    </form>
+    <h1>Items Table</h1>
+    <table id="itemsTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Purchase Date</th>
+                <th>Stock Available</th>
+                <th>Item Type</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Rows will be inserted here -->
+        </tbody>
+    </table>
+    <div id="editForm" style="display:none;">
+        <h3>Edit Item</h3>
+        <form id="editItemForm">
+            <input type="hidden" id="editItemId" />
+            <label for="editName">Name:</label>
+            <input type="text" id="editName" required />
+            <label for="editPurchaseDate">Purchase Date:</label>
+            <input type="date" id="editPurchaseDate" required />
+            <label for="editStockAvailable">Stock Available:</label>
+            <input type="checkbox" id="editStockAvailable" />
+            <label for="editItemType">Item Type:</label>
+            <select id="editItemType" required>
+                <option value="1">Electronics</option>
+                <option value="2">Furniture</option>
+                <option value="3">Clothing</option>
+            </select>
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
