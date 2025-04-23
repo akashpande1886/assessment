@@ -91,12 +91,10 @@ router.delete("/delete-item/:id", (req, res) => {
   });
 });
 
-// Update an item by ID
 router.put("/update-item/:id", (req, res) => {
   const itemId = req.params.id;
   const { name, purchase_date, stock_available, item_type_id } = req.body;
 
-  // Query to update the item in the 'items' table
   const query = `
       UPDATE items 
       SET name = ?, purchase_date = ?, stock_available = ?, item_type_id = ? 
@@ -120,7 +118,7 @@ router.put("/update-item/:id", (req, res) => {
     }
   );
 });
-// Backend code: Get a single item by ID
+
 router.get("/get-item/:id", (req, res) => {
   const itemId = req.params.id;
 
@@ -134,7 +132,6 @@ router.get("/get-item/:id", (req, res) => {
       return res.status(404).json({ error: "Item not found" });
     }
 
-    // Return the item data as JSON
     res.status(200).json(result[0]);
   });
 });
