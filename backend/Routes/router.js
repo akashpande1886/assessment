@@ -2,24 +2,20 @@ const express = require("express");
 const router = express.Router();
 const db = require("../db/db");
 
-// Route to handle multiple item insertion
 router.post("/add-item", (req, res) => {
   const { purchase_date, items } = req.body;
 
-  // Basic validations
   if (!purchase_date || !Array.isArray(items) || items.length === 0) {
     return res
       .status(400)
       .json({ error: "Purchase date and at least one item are required." });
   }
 
-  // Prepare SQL query
   const query = `
     INSERT INTO items (name, purchase_date, stock_available, item_type_id)
     VALUES ?
   `;
 
-  // Convert items array into [ [name, purchase_date, stock_available, item_type_id], ... ]
   const values = items.map((item) => {
     if (!item.name || !item.item_type_id) {
       return res

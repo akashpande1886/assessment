@@ -55,35 +55,32 @@ document
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-
+    if (res.status === 200) {
+      window.location.reload();
+    }
     const result = await res.json();
     alert(result.message || result.error);
   });
 
-// Helper function to format the date in 'YYYY-MM-DD' format
 function formatDate(dateString) {
   const date = new Date(dateString);
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // Add leading zero for months < 10
-  const day = String(date.getDate()).padStart(2, "0"); // Add leading zero for days < 10
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
 
-  return `${year}-${month}-${day}`;
+  return `${day}-${month}-${year}`;
 }
 
 // Function to fetch and display items
 async function fetchItems() {
   try {
-    // Fetch items from the backend
     const response = await fetch("http://localhost:8000/get-items");
     const items = await response.json();
 
-    // Get the tbody element to insert the rows
     const tbody = document.getElementById("tableBody");
 
-    // Clear any existing rows
     tbody.innerHTML = "";
 
-    // Loop through the items and insert rows into the table
     items.forEach((item) => {
       const row = document.createElement("tr");
       row.setAttribute("data-id", item.id);
@@ -91,9 +88,7 @@ async function fetchItems() {
       row.innerHTML = `
             <td>${item.id}</td>
             <td>${item.name}</td>
-            <td>${formatDate(
-              item.purchase_date
-            )}</td> <!-- Format the date here -->
+            <td>${formatDate(item.purchase_date)}</td> 
             <td class="${item.stock_available ? "stock-true" : "stock-false"}">
               ${item.stock_available ? "Yes" : "No"}
             </td>
@@ -115,19 +110,14 @@ async function fetchItems() {
   }
 }
 
-// Call the fetchItems function immediately after the script is loaded or triggered
 fetchItems();
 
-// Function to edit an item
 function editItem(itemId) {
-  // Fetch the item data
   fetch(`http://localhost:8000/get-item/${itemId}`)
     .then((res) => res.json())
     .then((item) => {
-      // Show the edit form
       document.getElementById("editForm").style.display = "block";
 
-      // Populate the form with the item's current data
       document.getElementById("editItemId").value = item.id;
       document.getElementById("editName").value = item.name;
       document.getElementById("editPurchaseDate").value = item.purchase_date;
@@ -138,7 +128,7 @@ function editItem(itemId) {
     .catch((error) => console.error("Error fetching item:", error));
 }
 
-// Function to save the edited item
+// Function - save the edited item
 document.getElementById("editItemForm").onsubmit = async function (e) {
   e.preventDefault();
 
@@ -155,7 +145,6 @@ document.getElementById("editItemForm").onsubmit = async function (e) {
     item_type_id,
   };
 
-  // Send a PUT request to update the item
   const res = await fetch(`http://localhost:8000/update-item/${itemId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -182,7 +171,6 @@ async function deleteItem(itemId) {
     alert(data.message || data.error);
 
     if (res.status === 200) {
-      // Remove the item from the table without reloading the page
       const row = document.querySelector(`tr[data-id="${itemId}"]`);
       if (row) {
         row.remove();
